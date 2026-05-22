@@ -1,0 +1,15 @@
+{
+  "name": "hawkins-house-assessment",
+  "version": "4.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "openai": "^6.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^44.0.0"
+  }
+}
