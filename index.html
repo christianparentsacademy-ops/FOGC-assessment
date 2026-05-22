@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hawkins House Assessment</title>
+
+<style>
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:radial-gradient(circle at top,#194b7c 0%,#0d2743 35%,#071423 100%);
+color:white;
+min-height:100vh;
+}
+
+.wrap{
+max-width:900px;
+margin:auto;
+padding:32px 18px 70px;
+}
+
+.card{
+background:#112943;
+border:1px solid #315f91;
+border-radius:24px;
+padding:30px;
+box-shadow:0 25px 70px rgba(0,0,0,.3);
+}
+
+button{
+border:none;
+border-radius:999px;
+padding:16px 24px;
+font-weight:800;
+font-size:16px;
+cursor:pointer;
+}
+
+.primary{
+background:white;
+color:#0d2743;
+}
+
+.actions{
+display:flex;
+gap:12px;
+margin-top:24px;
+}
+
+.section{
+background:#0b2036;
+border:1px solid #315f91;
+border-radius:18px;
+padding:18px;
+margin-top:16px;
+}
+
+.close-help{
+display:none;
+text-align:center;
+margin-top:18px;
+color:#d8e6f7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+<div class="card">
+
+<h1>Assessment Result</h1>
+
+<div class="section">
+<h3>Summary</h3>
+<p>
+Your responses show strong conceptual understanding of the Parent Pillar framework while also revealing a few areas that still need reinforcement.
+</p>
+</div>
+
+<div class="section">
+<h3>Areas of Strength</h3>
+<ul>
+<li>Strong comprehension of family as God’s foundational structure.</li>
+<li>Strong understanding of discipleship as Kingdom formation.</li>
+</ul>
+</div>
+
+<div class="section">
+<h3>Areas Needing Reinforcement</h3>
+<ul>
+<li>Review the distinction between the Gospel of Grace and the Gospel of the Kingdom.</li>
+<li>Review discipleship as citizenship training.</li>
+</ul>
+</div>
+
+<div class="actions">
+<button class="primary" onclick="closeAssessment()">
+Close Assessment
+</button>
+</div>
+
+<p id="closeHelp" class="close-help">
+You may now close this tab or return to the Hawkins House page.
+</p>
+
+</div>
+</div>
+
+<script>
+function closeAssessment(){
+
+  try{
+    window.parent.postMessage(
+      { type: "HH_CLOSE_ASSESSMENT" },
+      "*"
+    );
+  }catch(e){}
+
+  try{
+    window.close();
+  }catch(e){}
+
+  const help = document.getElementById("closeHelp");
+
+  if(help){
+    help.style.display = "block";
+  }
+}
+</script>
+
+</body>
+</html>
