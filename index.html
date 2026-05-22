@@ -1,0 +1,212 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Foundation of God's Country Assessment</title>
+<style>
+:root{--bg:#071423;--blue:#0d2743;--card:#112943;--line:#315f91;--text:#fff;--muted:#c9d8ea;--accent:#87bcff;--darkText:#0d2743;--radius:24px}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at top center,#194b7c 0%,#0d2743 32%,#071423 78%);min-height:100vh}
+.wrap{max-width:980px;margin:0 auto;padding:32px 16px 70px}
+.card,.q-card,.result-card{background:rgba(17,41,67,.94);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 25px 70px rgba(0,0,0,.28)}
+.card{padding:34px}
+.kicker{color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:12px;font-weight:900}
+h1{font-size:clamp(36px,6vw,66px);line-height:.95;margin:12px 0 16px}
+h2{font-size:clamp(26px,4vw,44px);line-height:1.05}
+p{color:var(--muted);line-height:1.65;font-size:16px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
+.pill{border:1px solid #4974a6;background:#14395f;border-radius:999px;padding:9px 14px;color:#e6f1ff;font-weight:750;font-size:13px}
+.field{margin-top:14px}
+label{display:block;margin-bottom:8px;font-weight:800}
+input{width:100%;padding:16px;border-radius:16px;border:1px solid #4974a6;background:#081c31;color:#fff;font-size:16px}
+input:focus{outline:none;border-color:#9dccff;box-shadow:0 0 0 4px rgba(135,188,255,.2)}
+.actions{display:flex;gap:12px;margin-top:22px}
+button{border:none;border-radius:999px;padding:16px 22px;font-size:16px;font-weight:900;cursor:pointer}
+.primary{background:#fff;color:var(--darkText)}
+.secondary{background:#14395f;color:#fff;border:1px solid #4974a6}
+.primary:disabled,.secondary:disabled{opacity:.45;cursor:not-allowed}
+.progress{height:12px;background:#0b2036;border-radius:999px;overflow:hidden;margin-bottom:18px}
+.bar{height:100%;width:0%;background:#fff;transition:.25s ease}
+.q-card{padding:30px}
+.q-meta{color:#abd0ff;font-weight:800;font-size:14px;margin-bottom:12px}
+.q{font-size:clamp(22px,4vw,32px);line-height:1.22;font-weight:900;margin-bottom:22px}
+.option{width:100%;text-align:left;display:block;padding:18px;margin:12px 0;background:#0b2036;color:#fff;border:1px solid #4974a6;border-radius:18px;font-size:16px;line-height:1.35;transition:.15s ease}
+.option:hover{border-color:#fff;transform:translateY(-1px)}
+.option.selected{background:#fff;color:#0d2743;border-color:#fff;box-shadow:0 0 0 2px #87bcff inset}
+.loading{text-align:center;padding:60px 20px}
+.result-card{padding:34px}
+.score{font-size:76px;line-height:1;font-weight:1000;margin:4px 0;color:#fff}
+.band{display:inline-block;margin:8px 0 20px;background:#fff;color:#0d2743;padding:10px 15px;border-radius:999px;font-weight:900}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+.small{background:#0b2036;border:1px solid #4974a6;border-radius:18px;padding:16px}
+.small strong{display:block;margin-bottom:8px}
+.section{background:#0b2036;border:1px solid #315f91;border-radius:18px;padding:18px;margin:16px 0}
+.section h3{margin:0 0 10px}
+li{margin:8px 0;color:#d8e6f7;line-height:1.5}
+.error{display:none;color:#ffd2d2;font-weight:800;margin-top:12px}
+@media(max-width:700px){.card,.q-card,.result-card{padding:22px}.grid{grid-template-columns:1fr}.actions{flex-direction:column}button{width:100%}.score{font-size:58px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section id="intro" class="card">
+  <div class="kicker">Hawkins House · Parent Pillar</div>
+  <h1>Foundation of God’s Country Assessment</h1>
+  <p>This assessment is designed to determine whether the revelation taught throughout the course has truly been understood, retained, and integrated.</p>
+  <div class="meta"><span class="pill">30 advanced questions</span><span class="pill">Curated results</span><span class="pill">Module reinforcement guidance</span></div>
+  <div class="field"><label for="name">First Name</label><input id="name" placeholder="Enter your first name" autocomplete="given-name" /></div>
+  <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="Enter your email" autocomplete="email" /></div>
+  <div class="actions"><button class="primary" onclick="start()">Begin Assessment</button></div>
+  <div id="introError" class="error">Please enter your name and a valid email.</div>
+</section>
+<section id="assessment" style="display:none;"><div class="progress"><div id="bar" class="bar"></div></div><div id="host"></div></section>
+<section id="loading" class="loading" style="display:none;"><h2>Preparing your curated result...</h2><p>Your responses are being reviewed against the course framework.</p></section>
+<section id="result" class="result-card" style="display:none;"></section>
+</main>
+<script>
+
+const QUESTIONS = [
+{id:1,category:"Gospel & Kingdom Understanding",answer:1,theme:"Gospel as the lens of reality",question:"According to the course, why is an inaccurate understanding of the Gospel dangerous for family discipleship?",options:["Because it creates denominational differences","Because the Gospel defines reality itself and shapes how everything else is interpreted","Because children dislike theological conversations","Because morality alone cannot build strong homes"]},
+{id:2,category:"Gospel & Kingdom Understanding",answer:1,theme:"Grace and Kingdom distinction",question:"Why does the course distinguish between the Gospel of Grace and the Gospel of the Kingdom?",options:["To separate Old and New Testament believers","To show that forgiveness and Kingdom governance are related but not identical realities","To argue against salvation by grace","To establish denominational hierarchy"]},
+{id:3,category:"Gospel & Kingdom Understanding",answer:2,theme:"Light as God's ordering essence",question:"What theological purpose did the course assign to light in Genesis before the creation of the sun?",options:["Light represented intelligence emerging naturally","Light symbolized human enlightenment","Light revealed God's essence bringing order and life into chaos","Light represented future scientific discovery"]},
+{id:4,category:"Gospel & Kingdom Understanding",answer:1,theme:"Salvation as kingdom transfer",question:"According to the course, salvation should primarily be understood as:",options:["A private religious decision","A transfer from one kingdom and nature into another","A moral improvement process","A future heavenly guarantee only"]},
+{id:5,category:"Gospel & Kingdom Understanding",answer:1,theme:"Kingdom as country and citizenship",question:"Why does the course repeatedly describe the Kingdom of God as a real country?",options:["To create political analogies","To emphasize structure, citizenship, culture, law, and belonging","To replace the concept of heaven","To prioritize institutions over relationships"]},
+{id:6,category:"Family as Foundation",answer:1,theme:"Family as God's foundational structure",question:"What was the course attempting to communicate by showing that God established family before governments, kings, or temples?",options:["That religious systems are unnecessary","That family is God's foundational structure for spreading Kingdom culture","That politics are inherently evil","That civilization developed accidentally"]},
+{id:7,category:"Family as Foundation",answer:0,theme:"Family as formation environment",question:"Why did the course connect societal collapse to fractures within family structures?",options:["Because Scripture presents family as the root environment where identity and culture are formed","Because governments control parenting","Because economics determine morality","Because churches cannot disciple children"]},
+{id:8,category:"Family as Foundation",answer:1,theme:"God entrusted Jesus to family",question:"What was the deeper theological significance of Jesus being entrusted to Mary and Joseph?",options:["It fulfilled Roman prophecy","God demonstrated that family is sacred enough to steward the Savior Himself","Jesus needed protection from culture","Marriage guarantees righteousness"]},
+{id:9,category:"Family as Foundation",answer:2,theme:"Home as primary Kingdom environment",question:"According to the course, why is discipleship in the home not optional?",options:["Because churches are ineffective","Because parents are morally superior","Because family is the primary environment where Kingdom identity is learned","Because education systems cannot teach values"]},
+{id:10,category:"Ministry of Parenthood",answer:1,theme:"Parenthood as spiritual office",question:"What was the course attempting to restore by describing parenthood as a spiritual office rather than merely a role?",options:["Traditional social expectations","The understanding that parenting carries divine jurisdiction and responsibility","Religious superiority","Gender competition"]},
+{id:11,category:"Ministry of Parenthood",answer:1,theme:"Male and female together reflecting God's image",question:"Why did the course emphasize that God's image is revealed through male and female together?",options:["To eliminate distinctions between men and women","To demonstrate that both reveal dimensions of God's nature in harmony","To prioritize marriage over discipleship","To redefine biblical authority"]},
+{id:12,category:"Ministry of Parenthood",answer:0,theme:"Tsela as side and shared humanity",question:"What was the significance of the Hebrew concept of tsêlâʻ being translated as 'side' instead of merely 'rib'?",options:["It symbolized equality, completion, and shared humanity","It rejected biological distinctions","It argued against leadership","It minimized fatherhood"]},
+{id:13,category:"Ministry of Parenthood",answer:1,theme:"Mother as soil of a waymaker",question:"Why did the course describe the office of a mother as 'the soil of a waymaker'?",options:["Because motherhood is passive support","Because mothers create environments where identity, nurture, and direction flourish","Because fathers are unnecessary","Because women are naturally more emotional"]},
+{id:14,category:"Ministry of Parenthood",answer:1,theme:"Mother's words shaping identity pathways",question:"What danger did the course associate with destructive speech from mothers?",options:["Children become less disciplined","Words can dismantle identity pathways and shape future emotional realities","Children reject education","Families lose financial stability"]},
+{id:15,category:"Ministry of Parenthood",answer:2,theme:"Father as seed and source of identity",question:"What central responsibility did the course associate with the office of a father?",options:["Maintaining emotional distance","Providing financial resources only","Initiating identity, direction, and purpose through consistent formation","Protecting cultural traditions"]},
+{id:16,category:"Ministry of Parenthood",answer:0,theme:"Jacob and generational identity formation",question:"Why did the course repeatedly reference Jacob speaking over his sons?",options:["To demonstrate prophetic identity formation across generations","To establish tribal politics","To prioritize favoritism","To encourage emotional discipline"]},
+{id:17,category:"Ministry of Parenthood",answer:0,theme:"Fatherhood beyond financial provision",question:"According to the course, why is reducing fatherhood to financial provision spiritually dangerous?",options:["Because it disconnects fathers from identity formation and discipleship","Because finances are unnecessary","Because mothers should lead homes alone","Because success is sinful"]},
+{id:18,category:"Ministry of Parenthood",answer:1,theme:"Seed, soil, and Spirit cooperating in formation",question:"What was the purpose of the seed, soil, and rain framework?",options:["To romanticize parenting","To show how fatherhood, motherhood, and the Spirit cooperate in formation","To prioritize biology over discipleship","To reject structure"]},
+{id:19,category:"Discipleship in the Home",answer:0,theme:"Discipleship as embodied Kingdom culture",question:"According to the course, why is discipleship best understood relationally rather than informationally?",options:["Because Kingdom culture must be modeled, walked with, and embodied","Because information has no value","Because children dislike structure","Because discipleship only happens emotionally"]},
+{id:20,category:"Discipleship in the Home",answer:1,theme:"Born again into Kingdom citizenship",question:"Why did the course ask, 'Where were you born when you were born again?'",options:["To challenge denominational assumptions","To establish spiritual citizenship within the Kingdom of God","To reject earthly responsibility","To encourage mystical thinking"]},
+{id:21,category:"Discipleship in the Home",answer:1,theme:"Church attendance without discipleship",question:"What problem arises when church attendance exists without true discipleship?",options:["People become overly emotional","Citizens lose understanding of the Kingdom culture they represent","Families become isolated","Children avoid leadership"]},
+{id:22,category:"Discipleship in the Home",answer:0,theme:"Citizenship training",question:"Why did the course describe discipleship as citizenship training?",options:["Because believers are learning how to live according to the culture and authority of God's Kingdom","Because Christianity is political","Because discipline matters more than love","Because religion requires structure"]},
+{id:23,category:"Discipleship in the Home",answer:1,theme:"Judges 2:10 and transfer failure",question:"What did Judges 2:10 reveal about generational failure?",options:["That God abandoned Israel","That truth stopped being relationally transferred between generations","That technology caused spiritual collapse","That worship practices disappeared"]},
+{id:24,category:"Discipleship in the Home",answer:0,theme:"Generational bridge",question:"Why did the course identify the space between generations as spiritually strategic?",options:["Because identity, truth, and culture must be intentionally transferred","Because younger generations reject leadership automatically","Because parents should control children","Because traditions prevent innovation"]},
+{id:25,category:"Discipleship in the Home",answer:0,theme:"Algorithms as formation",question:"What was the deeper concern behind the statement 'algorithms have become the new rabbis'?",options:["Technology is forming identity and worldview faster than intentional discipleship","Artificial intelligence is evil","Children should avoid the internet completely","Churches should ban social media"]},
+{id:26,category:"Discipleship in the Home",answer:0,theme:"Technology limits versus joyful vision of Jesus",question:"According to the course, why is merely restricting technology insufficient?",options:["Because children primarily need a compelling vision of life with Jesus, not only limitation","Because technology is harmless","Because discipline creates rebellion","Because children naturally mature spiritually"]},
+{id:27,category:"Discipleship in the Home",answer:0,theme:"Identity as divine revelation",question:"Why did the course argue that identity is divine revelation rather than self-expression?",options:["Because identity originates from God's design rather than cultural construction","Because personality is irrelevant","Because emotions are deceptive","Because achievement determines value"]},
+{id:28,category:"Discipleship in the Home",answer:0,theme:"Fear-based parenting fractures identity",question:"What danger did the course associate with parenting primarily through fear?",options:["Fear creates temporary obedience but fractures identity and relationship","Fear weakens education","Fear eliminates ambition","Fear prevents discipline entirely"]},
+{id:29,category:"Discipleship in the Home",answer:0,theme:"Modeling over instruction alone",question:"Why did the course repeatedly emphasize modeling over merely instructing?",options:["Because children are formed more deeply by embodied patterns than verbal correction alone","Because teaching lacks value","Because structure creates legalism","Because children resist authority"]},
+{id:30,category:"Discipleship in the Home",answer:1,theme:"Home as primary environment of Kingdom discipleship",question:"What was the overarching purpose of the entire course framework?",options:["To produce religious performance","To restore the home as the primary environment of Kingdom discipleship and formation","To increase church attendance","To establish educational reform"]}
+];
+
+
+let current = 0;
+const answers = {};
+
+function validEmail(email){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
+
+function start(){
+  const name=document.getElementById("name").value.trim();
+  const email=document.getElementById("email").value.trim();
+  if(!name || !validEmail(email)){document.getElementById("introError").style.display="block";return;}
+  document.getElementById("intro").style.display="none";
+  document.getElementById("assessment").style.display="block";
+  render();
+}
+
+function render(){
+  const q=QUESTIONS[current];
+  document.getElementById("bar").style.width=((current)/QUESTIONS.length*100)+"%";
+  document.getElementById("host").innerHTML=`
+    <div class="q-card">
+      <div class="q-meta">Question ${current+1} of ${QUESTIONS.length} · ${q.category}</div>
+      <div class="q">${q.question}</div>
+      ${q.options.map((o,i)=>`<button class="option ${answers[q.id]===i?'selected':''}" onclick="pick(${q.id},${i})">${o}</button>`).join("")}
+      <div class="actions">
+        <button class="secondary" onclick="back()" ${current===0?'disabled':''}>Back</button>
+        <button class="primary" onclick="next()" ${answers[q.id]===undefined?'disabled':''}>${current===QUESTIONS.length-1?'Submit Assessment':'Continue'}</button>
+      </div>
+    </div>`;
+}
+
+function pick(id,val){answers[id]=val;render()}
+function back(){if(current>0){current--;render()}}
+function next(){if(answers[QUESTIONS[current].id]===undefined)return;if(current<QUESTIONS.length-1){current++;render()} else {submitAssessment()}}
+
+function getBand(score){if(score>=90)return "Foundation Established";if(score>=75)return "Foundation Strengthening";if(score>=60)return "Areas Needing Reinforcement";return "Re-engagement Recommended"}
+
+function localScore(){
+  const categories={};
+  QUESTIONS.forEach(q=>{
+    if(!categories[q.category]) categories[q.category]={correct:0,total:0,missed:[],mastered:[]};
+    categories[q.category].total++;
+    if(Number(answers[q.id])===q.answer){categories[q.category].correct++;categories[q.category].mastered.push(q.theme)}else{categories[q.category].missed.push(q.theme)}
+  });
+  const correct=Object.values(categories).reduce((s,c)=>s+c.correct,0);
+  const totalScore=Math.round((correct/QUESTIONS.length)*100);
+  const categoryScores={}, weakCategories=[], strongCategories=[];
+  Object.entries(categories).forEach(([cat,data])=>{
+    const score=Math.round((data.correct/data.total)*100);
+    categoryScores[cat]=score;
+    if(score<70)weakCategories.push({category:cat,score,missedThemes:data.missed});
+    if(score>=80)strongCategories.push({category:cat,score,masteredThemes:data.mastered});
+  });
+  return {totalScore,resultBand:getBand(totalScore),categoryScores,weakCategories,strongCategories};
+}
+
+function localInterpretation(scored){
+  return {
+    headline: scored.resultBand,
+    scoreMeaning: `Your score of ${scored.totalScore}% places you in the “${scored.resultBand}” range. This result is not meant to shame you. It shows where the foundation is established and where the course should be revisited.`,
+    summary: scored.totalScore>=75 ? "Your responses show that the core framework is taking root. You are beginning to understand the Gospel, Kingdom, family, parenthood, and discipleship as one connected vision." : "Your responses show that several core ideas still need reinforcement before moving forward. The best next step is to slow down and revisit the areas below.",
+    strengths: scored.strongCategories.length ? scored.strongCategories.map(s=>`You showed strong understanding in ${s.category}, especially around: ${s.masteredThemes.slice(0,3).join(", ")}.`) : ["No category reached the strong mastery threshold yet. This means the course should be reviewed again with special attention to the core framework."],
+    reinforcementAreas: scored.weakCategories.length ? scored.weakCategories.map(w=>`${w.category} needs reinforcement. Pay close attention to: ${w.missedThemes.slice(0,4).join(", ")}.`) : ["No category fell below the reinforcement threshold."],
+    recommendedReview: scored.weakCategories.length ? scored.weakCategories.map(w=>`Review the course material connected to ${w.category} before continuing deeper into the Parent Pillar pathway.`) : ["Lightly review your notes, then continue to the next step of the Parent Pillar pathway."],
+    nextStep: scored.totalScore<60 ? "Retake the course before moving forward." : scored.totalScore<75 ? "Review the recommended modules, then retake the assessment." : "You may continue forward, while still reviewing any areas listed above.",
+    encouragement: "Formation takes attention, repetition, humility, and grace. The goal is not merely to answer correctly. The goal is to let the revelation shape how you see God, family, parenthood, and discipleship."
+  }
+}
+
+async function submitAssessment(){
+  document.getElementById("assessment").style.display="none";
+  document.getElementById("loading").style.display="block";
+  const name=document.getElementById("name").value.trim();
+  const email=document.getElementById("email").value.trim();
+  const local=localScore();
+
+  try{
+    const response=await fetch("/api/assess",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email,answers})});
+    if(!response.ok) throw new Error("API failed");
+    const data=await response.json();
+    if(!data || !data.interpretation) throw new Error("Missing interpretation");
+    showResult(data);
+  }catch(e){
+    showResult({name,email,...local,interpretation:localInterpretation(local)});
+  }
+}
+
+function showResult(data){
+  document.getElementById("loading").style.display="none";
+  const result=document.getElementById("result");
+  const i=data.interpretation || localInterpretation(data);
+  result.style.display="block";
+  result.innerHTML=`
+    <div class="kicker">Curated Assessment Result</div>
+    <h1>${i.headline || data.resultBand}</h1>
+    <div class="score">${data.totalScore}%</div>
+    <div class="band">${data.resultBand}</div>
+    <div class="section"><h3>What This Score Means</h3><p>${i.scoreMeaning || ""}</p></div>
+    <div class="grid">${Object.entries(data.categoryScores || {}).map(([cat,score])=>`<div class="small"><strong>${cat}</strong>${score}%</div>`).join("")}</div>
+    <div class="section"><h3>Summary</h3><p>${i.summary || ""}</p></div>
+    <div class="section"><h3>Areas of Strength</h3><ul>${(i.strengths || []).map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <div class="section"><h3>Areas Needing Reinforcement</h3><ul>${(i.reinforcementAreas || []).map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <div class="section"><h3>Recommended Review</h3><ul>${(i.recommendedReview || []).map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <div class="section"><h3>Next Step</h3><p>${i.nextStep || ""}</p></div>
+    <div class="section"><h3>Encouragement</h3><p>${i.encouragement || ""}</p></div>
+  `;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>
