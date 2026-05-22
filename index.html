@@ -1,0 +1,156 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hawkins House Assessment V2</title>
+<style>
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:#0d1b2a;
+color:white;
+}
+.wrap{
+max-width:900px;
+margin:auto;
+padding:24px;
+}
+.card{
+background:#132238;
+border:1px solid #28476d;
+border-radius:24px;
+padding:28px;
+}
+h1{
+font-size:52px;
+line-height:.95;
+}
+p{
+color:#d0dceb;
+line-height:1.6;
+}
+.option{
+width:100%;
+padding:18px;
+margin:12px 0;
+border-radius:18px;
+background:#17304f;
+border:1px solid #3d5f86;
+color:white;
+text-align:left;
+font-size:16px;
+}
+.progress{
+height:12px;
+background:#17304f;
+border-radius:999px;
+overflow:hidden;
+margin-bottom:18px;
+}
+.bar{
+height:100%;
+width:0%;
+background:#7cb4ff;
+}
+.q{
+font-size:28px;
+line-height:1.25;
+margin-bottom:20px;
+}
+button{
+cursor:pointer;
+}
+.primary{
+padding:16px 24px;
+border:none;
+border-radius:999px;
+background:#7cb4ff;
+color:#08111d;
+font-weight:800;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+<h1>Foundation of God's Country Assessment</h1>
+<p>Advanced theological comprehension and discipleship integration assessment.</p>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+<div id="host"></div>
+</div>
+</div>
+
+<script>
+const QUESTIONS = [
+{
+question:"According to the course, why is an inaccurate understanding of the Gospel dangerous for family discipleship?",
+options:[
+"Because it creates denominational differences",
+"Because the Gospel defines reality itself and shapes how everything else is interpreted",
+"Because children dislike theological conversations",
+"Because morality alone cannot build strong homes"
+]
+},
+{
+question:"Why does the course distinguish between the Gospel of Grace and the Gospel of the Kingdom?",
+options:[
+"To separate Old and New Testament believers",
+"To show that forgiveness and Kingdom governance are related but not identical realities",
+"To argue against salvation by grace",
+"To establish denominational hierarchy"
+]
+},
+{
+question:"What theological purpose did the course assign to light in Genesis before the creation of the sun?",
+options:[
+"Light represented intelligence emerging naturally",
+"Light symbolized human enlightenment",
+"Light revealed God's essence bringing order and life into chaos",
+"Light represented future scientific discovery"
+]
+},
+{
+question:"What was the overarching purpose of the entire course framework?",
+options:[
+"To produce religious performance",
+"To restore the home as the primary environment of Kingdom discipleship and formation",
+"To increase church attendance",
+"To establish educational reform"
+]
+}
+];
+
+let current = 0;
+
+function render(){
+const q = QUESTIONS[current];
+document.getElementById("bar").style.width = ((current)/QUESTIONS.length)*100 + "%";
+
+document.getElementById("host").innerHTML = `
+<div class="q">${q.question}</div>
+${q.options.map(o=>`<button class="option">${o}</button>`).join("")}
+<br><br>
+<button class="primary" onclick="next()">Continue</button>
+`;
+}
+
+function next(){
+if(current < QUESTIONS.length - 1){
+current++;
+render();
+}else{
+document.getElementById("host").innerHTML = "<h2>Assessment V2 Loaded Successfully</h2><p>Replace this file only. Keep your existing backend files.</p>";
+document.getElementById("bar").style.width = "100%";
+}
+}
+
+render();
+</script>
+</body>
+</html>
